@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FLORA FIELD — 指尖花海</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Inter:wght@400;500&family=Noto+Serif+SC:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <canvas id="field-canvas"></canvas>
+
+    <div id="loading-overlay" class="loading-overlay">
+      <div class="loading-title">FLORA FIELD</div>
+      <div class="loading-bar-wrap">
+        <div id="loading-bar" class="loading-bar"></div>
+      </div>
+      <div id="loading-sub" class="loading-sub">正在唤醒花海纹理 0%</div>
+    </div>
+
+    <div id="hud-chrome" class="hud-chrome">
+      <div class="top-left-brand">
+        <div class="brand-card">
+          <span class="brand-name">FLORA FIELD</span>
+          <span class="brand-divider"></span>
+          <span class="brand-sub">指尖花海 · 循迹而绽</span>
+        </div>
+        <div id="counter-pill" class="counter-pill">0 / 68 盛放</div>
+      </div>
+
+      <div class="top-right-actions">
+        <button id="camera-btn" class="pill-btn is-primary" type="button">
+          <span class="dot-live"></span>
+          <span id="camera-btn-label">开启手势</span>
+        </button>
+        <button id="drawer-btn" class="pill-btn" type="button">调节面板</button>
+        <button id="pip-btn" class="pill-btn" type="button">镜头预览</button>
+        <button id="hide-ui-btn" class="pill-btn" type="button" title="快捷键 H">隐藏界面</button>
+      </div>
+
+      <aside id="control-drawer" class="control-drawer" aria-label="花海交互调节面板">
+        <div class="drawer-section">
+          <div class="section-label"><span>余韵模式</span></div>
+          <div id="hover-mode-group" class="segmented">
+            <button class="seg-btn is-active" type="button" data-value="linger">拖尾余韵</button>
+            <button class="seg-btn" type="button" data-value="spotlight">实时聚光灯</button>
+            <button class="seg-btn" type="button" data-value="paint">花海画笔</button>
+          </div>
+        </div>
+
+        <div class="drawer-section">
+          <div class="section-label"><span>手势触发</span></div>
+          <div id="gesture-mode-group" class="segmented">
+            <button class="seg-btn is-active" type="button" data-value="position-openness">位置 + 张合</button>
+            <button class="seg-btn" type="button" data-value="position-only">纯位置</button>
+          </div>
+        </div>
+
+        <div class="drawer-section">
+          <div class="section-label">
+            <span>绽放半径</span>
+            <span id="radius-val">250px</span>
+          </div>
+          <input id="radius-range" class="range-input" type="range" min="140" max="420" step="10" value="250" />
+        </div>
+
+        <div class="drawer-section">
+          <div class="section-label">
+            <span>余韵时长</span>
+            <span id="linger-val">1.0×</span>
+          </div>
+          <input id="linger-range" class="range-input" type="range" min="0.4" max="2.5" step="0.1" value="1.0" />
+        </div>
+
+        <div class="drawer-section">
+          <div class="section-label">
+            <span>花海密度</span>
+            <span id="density-val">68 朵</span>
+          </div>
+          <input id="density-range" class="range-input" type="range" min="36" max="100" step="4" value="68" />
+        </div>
+
+        <div class="drawer-actions">
+          <button id="bloom-all-btn" class="mini-btn" type="button">全屏盛放</button>
+          <button id="close-all-btn" class="mini-btn" type="button">合拢花海</button>
+          <button id="relayout-btn" class="mini-btn" type="button">重新排布</button>
+        </div>
+      </aside>
+
+      <div class="bottom-hint">
+        移动手掌至任意区域唤醒局部花海 · 张掌盛放 · 握拳收拢 · 支持双手与鼠标滑过
+      </div>
+
+      <section id="camera-pip" class="camera-pip" aria-label="双手手势镜头预览">
+        <video id="webcam-video" autoplay playsinline muted></video>
+        <canvas id="skeleton-canvas"></canvas>
+
+        <div class="pip-telemetry">
+          <div class="pip-row">
+            <div class="pip-row-head">
+              <span>01 主手</span>
+              <span id="hand1-val">未检测</span>
+            </div>
+            <div class="pip-bar-track">
+              <div id="hand1-bar" class="pip-bar-fill"></div>
+            </div>
+          </div>
+          <div class="pip-row">
+            <div class="pip-row-head">
+              <span>02 副手</span>
+              <span id="hand2-val">未检测</span>
+            </div>
+            <div class="pip-bar-track">
+              <div id="hand2-bar" class="pip-bar-fill is-hand2"></div>
+            </div>
+          </div>
+        </div>
+
+        <div id="pip-banner" class="pip-banner">
+          <div id="pip-banner-title">摄像头未开启</div>
+          <div id="pip-banner-sub" class="pip-banner-sub">点击「开启手势」启用双手空间感应</div>
+        </div>
+      </section>
+    </div>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

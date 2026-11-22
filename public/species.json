@@ -1,0 +1,38 @@
+[
+  {
+    "id": "peony",
+    "zhName": "牡丹",
+    "enName": "Peony",
+    "pollenColor": "#E8B0BA",
+    "weight": 1.15,
+    "frameDir": "/sprites/peony",
+    "frameCount": 54
+  },
+  {
+    "id": "camellia",
+    "zhName": "山茶",
+    "enName": "Camellia",
+    "pollenColor": "#EAE0C8",
+    "weight": 1.0,
+    "frameDir": "/sprites/camellia",
+    "frameCount": 54
+  },
+  {
+    "id": "ranunculus",
+    "zhName": "洋牡丹",
+    "enName": "Ranunculus",
+    "pollenColor": "#F0B694",
+    "weight": 1.1,
+    "frameDir": "/sprites/ranunculus",
+    "frameCount": 54
+  },
+  {
+    "id": "anemone",
+    "zhName": "银莲花",
+    "enName": "Anemone",
+    "pollenColor": "#BFAEE0",
+    "weight": 0.95,
+    "frameDir": "/sprites/anemone",
+    "frameCount": 54
+  }
+]

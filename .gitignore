@@ -1,0 +1,11 @@
+node_modules/
+dist/
+.DS_Store
+*.log
+
+# Compiled macOS binary (source is scripts/matte_frames.swift)
+scripts/matte_frames
+
+# Duplicate raw download subfolders (canonical files live directly in assets/buds/*.png and assets/videos/*.mp4)
+assets/buds/*/
+assets/videos/*/
