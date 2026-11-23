@@ -1,136 +1,155 @@
 # flower-sea
 
-**FLORA FIELD · 指尖花海** — 全屏写实俯拍花海空间手势交互网站。
+**基于 AIGC 真实延时视频 + macOS Vision 神经透明抠图 + MediaPipe 本地双手空间识别的写实花卉交互合集**。
 
-内置 4 种 90° 俯拍真花延时视频（**牡丹、山茶、洋牡丹、银莲花**）及 Apple Vision 神经透明抠图序列帧（共 216 张 RGBA WebP）。将手掌移动至屏幕任意角落（如右上角），对应区域的花海便会随指尖唤醒绽放，并留下柔和的花浪拖尾与微风花粉。
+本仓库完整收录了从「单花画廊」到「全屏花海」再到「繁花油画」逐步演进的 **3 个独立可运行版本**。所有视频帧、透明花朵纹理、MediaPipe WASM 运行时与手势模型均已打包进仓库，**拉下即可本地跑通，无需翻墙、无需额外下载模型或配置后端**。
 
 ---
 
-## 本地快速启动（开箱即用）
+## 三个版本一览
 
-MediaPipe WASM 运行时、手部关键点模型（`hand_landmarker.task`）以及全部透明花朵纹理均已打包在 `public/` 目录内，拉下仓库即可离线/本地运行，无需额外下载大模型或配置后端。
+| 版本 | 目录 | 视觉风格与构图 | 核心交互体验 | 默认端口 |
+| :--- | :--- | :--- | :--- | :--- |
+| **V3 · JARDIN（繁花油画）** | `apps/v3-jardin-oil` | 荷兰古典明暗油画底衬 + 5 种 3/4 斜面真花密铺（粉牡丹 / 丝绒玫瑰 / 金杏郁金香 / 暮紫鸢尾 / 白山茶，共 ~96 朵） | **实时跟随**（默认）：手移至任意区域即刻盛开并点亮伦勃朗追光，**离开后约 1 秒自动平滑合拢**；支持双手、握拳收拢 | `5175` |
+| **V2 · FLORA FIELD（俯拍花海）** | `apps/v2-flora-field` | 浅暖画廊纸底色（`#F4F1EA`）+ 4 种 90° 俯拍透明花朵（牡丹 / 山茶 / 洋牡丹 / 银莲花），三层泊松盘铺设全屏 | **拖尾余韵**（默认）：手移走后花朵保留约 1.5–2.3 秒再错落合拢，挥手留下花浪尾迹；支持切换实时聚光灯与花海画笔 | `5174` |
+| **V1 · FLORA（单花画廊）** | `apps/v1-flora-single` | 极简博物馆标本画廊排版 + 3 支高清棚拍花朵延时视频（牡丹 / 鸢尾 / 山茶，90 帧 WebP 零延迟搓帧） | 拇指与食指张合比例控制单花 0%–100% 绽放；第二只手张掌切花；支持上下分屏录屏视图与拖入自定义 MP4 | `5173` |
+
+---
+
+## 效果预览（Screenshots）
+
+### V3 · JARDIN（繁花油画 · 斜面密铺 & 移开自动合拢）
+> 约 96 朵 3/4 斜面花枝叠加在 2K 深翠绿油画枝叶底图上；鼠标/手掌停在右上角时局部沐浴金光盛开，移走后自动收回含苞。
+
+![V3 JARDIN 繁花油画效果截图](docs/screenshots/v3-jardin-oil.png)
+
+### V2 · FLORA FIELD（浅暖画廊俯拍花海）
+> 透明花朵在暖米白画廊纸上自由呼吸，光环所到之处花朵次第展开。
+
+![V2 FLORA FIELD 俯拍花海效果截图](docs/screenshots/v2-flora-field.png)
+
+### V1 · FLORA（单花画廊 & 分屏手势 HUD）
+> 复刻经典 `FLORA` 标本画廊排版与底部手部骨架遥测界面，支持 1-Euro 自适应滤波与静止防抖。
+
+![V1 FLORA 单花画廊与分屏 HUD 截图](docs/screenshots/v1-flora-single.png)
+
+<details>
+<summary>点击展开：透明抠图与序列帧质检示例（macOS Vision + 去白边/去暗边后处理）</summary>
+
+| V2 俯拍白山茶（棋盘格 / 画廊纸对比） | V3 斜面丝绒玫瑰（棋盘格 / 暗调画布对比） |
+| :---: | :---: |
+| ![V2 山茶透明抠图质检](docs/screenshots/v2-camellia-matte.jpg) | ![V3 丝绒玫瑰透明抠图质检](docs/screenshots/v3-crimson-rose-matte.jpg) |
+
+</details>
+
+---
+
+## 快速启动（本地运行 3 个版本）
 
 ### 环境要求
 - **Node.js 18+**（自带 `npm`）
 
-### 启动命令
+### 1. 克隆仓库并安装依赖
 
 ```bash
 git clone https://github.com/wonderful-1101/flower-sea.git
 cd flower-sea
-npm install
-npm run dev
+
+# 一次安装 3 个版本的依赖
+npm run install:all
+
+# 如果只想体验某一个版本，也可以单独安装（例如只装 V3 繁花油画）：
+# npm run install:v3
 ```
 
-启动后在浏览器打开 **`http://localhost:5174`** 即可开始体验。
-
-### 生产构建与预览
+### 2. 启动任意一个版本
 
 ```bash
-npm run build
-npm run preview
+# 启动 V3 · JARDIN（繁花油画） → http://localhost:5175
+npm run dev:v3
+
+# 启动 V2 · FLORA FIELD（俯拍花海） → http://localhost:5174
+npm run dev:v2
+
+# 启动 V1 · FLORA（单花画廊） → http://localhost:5173
+npm run dev:v1
 ```
 
-`npm run preview` 默认运行在 `http://localhost:4174`，静态产物输出在 `dist/` 目录。
+---
+
+## 各版本交互与玩法
+
+### V3 · JARDIN（`apps/v3-jardin-oil`）
+- **摄像头手势**：点击右上角 **「开启手势」**（纯浏览器本地推理，视频流不上传服务器）；手掌移到画面任意角落即可唤醒局部花丛，**张掌盛放 / 握拳原地收拢**，手移开后原来位置的花朵会自动平滑合回花苞（支持双手同时操作两个区域）。
+- **无摄像头预览**：直接用鼠标或触控在画面上移动即可唤醒局部花海；按住鼠标右键或按住 `Shift` 移动可模拟握拳收拢。
+- **调节面板 & 快捷键**：点击 **「调节面板」** 可调 **响应模式**（`实时跟随` / `短暂余韵` / `油画定格`）、**手势触发**（`位置 + 张合` / `纯位置`）、绽放半径、合拢时长、花丛密度以及 `全屏盛放 / 合拢花海 / 重新排布`；支持快捷键 `H`（隐藏全部 UI）、`Space`（全屏盛放）、`Esc`（合拢）。
+
+### V2 · FLORA FIELD（`apps/v2-flora-field`）
+- **空间交互**：同样支持双手摄像头感应与鼠标/触控滑过；默认采用 **「拖尾余韵」**，手划过后花朵保持盛开约 1.5–2.3 秒再逐朵回落，适合在浅色画廊底色上划出舒缓的花浪尾迹。
+- **调节面板**：支持切换 `拖尾余韵` / `实时聚光灯` / `花海画笔`、调节半径/余韵时长/花海密度以及 `H` 键隐藏界面。
+
+### V1 · FLORA（`apps/v1-flora-single`）
+- **单手控制**：摄像头前用拇指与食指张合控制花朵 `0%–100%` 绽放进度（内置 1-Euro 滤波 + 静止死区，手停稳即定格不蠕动）。
+- **切花与录屏模式**：第二只手张掌保持约 0.55 秒可切换花种（也可按 `←` / `→` 或 `1`–`3` 切换）；点击 **「分屏视图」** 可切换为上下分屏录屏界面；支持直接 **拖入任意本地 MP4/WebM 视频** 自动抽帧体验。
+- **无摄像头**：支持鼠标左右拖拽、滚轮或底部 `BLOOM` 滑块搓帧预览。
 
 ---
 
-## 怎么玩（交互指南）
+## 部署分享给别人在线体验（推荐 Vercel / Netlify）
 
-### 1. 摄像头双手空间交互
-1. 点击页面右上角 **「开启手势」**，允许浏览器访问摄像头（全程在浏览器本地运行 MediaPipe 推理，视频流不会上传任何服务器）。
-2. **空间唤醒**：将手掌移动到画面任意位置（例如右上角），该区域的花朵会由花心向外呈梯度波浪盛开。
-3. **张合叠加（默认开启）**：
-   - **张开手掌**：该区域花海加速绽放，影响半径扩大；
-   - **握拳**：主动将附近正在盛开的花朵合拢为花苞；
-   - **支持双手同时入镜**：两只手可同时在屏幕不同区域形成两个独立的绽放光环。
-4. 点击右上角 **「镜头预览」** 可随时展开或收起右下角镜像摄像头与 21 点绿色手部骨架小窗。
+> **重要提示（浏览器安全限制）**：浏览器仅在 `http://localhost` 或 **`https://` 安全域名**下允许调用摄像头（`getUserMedia`）。如果直接在局域网通过 HTTP IP 访问，鼠标交互正常可用，但摄像头权限会被浏览器拦截。
 
-### 2. 无摄像头 / 鼠标与触控体验
-- 直接用鼠标或手指在屏幕任意位置划过，即可如春风拂过般唤醒局部花海。
-- **按住鼠标右键** 或 **按住 `Shift` 键移动鼠标**，可模拟「握拳收拢」效果。
+想把链接直接发给朋友体验摄像头手势，推荐用 **Vercel / Netlify / Cloudflare Pages** 免费部署（自带 HTTPS）：
 
-### 3. 调节面板与快捷键
-点击右上角 **「调节面板」** 可实时调整花海手感：
-- **余韵模式**：
-  - **拖尾余韵**（默认）：手移开后花朵保持盛开约 1.5–2.3 秒再错落合拢，挥手留下花浪尾迹；
-  - **实时聚光灯**：仅手掌所在光环内盛放，移开即刻平滑收拢；
-  - **花海画笔**：手划过的区域保持常开，适合在画布上“画”出整片盛放花海。
-- **手势触发**：可在 **「位置 + 张合」**（默认）与 **「纯位置」**（零门槛，移到即开）之间切换。
-- **参数滑块**：支持调节 **绽放半径**（`140px–420px`）、**余韵时长**（`0.4×–2.5×`）与 **花海密度**（`36–100 朵`）。
-- **快捷操作**：面板底部提供 **全屏盛放 / 合拢花海 / 重新排布**；键盘快捷键支持：
-  - `H`：隐藏 / 显示全部界面元素（纯净画廊模式）
-  - `Space`：一键全屏盛放
-  - `Esc`：一键合拢花海
-
----
-
-## 怎么让别人来用（部署与分享）
-
-> **重要提示（浏览器安全限制）**：现代浏览器（Chrome / Safari / Edge 等）仅在 `http://localhost` 或 **`https://` 安全域名**下允许调用摄像头（`getUserMedia`）。如果直接通过局域网 HTTP IP 打开，鼠标交互正常可用，但摄像头按钮会被浏览器拦截。
-
-### 推荐方式：一键部署到 Vercel / Netlify / Cloudflare Pages（自动带 HTTPS）
-把本项目推送到 GitHub 后，只需 3 步就能生成任何人可直接在电脑或手机上打开的 `https://` 公开链接：
-
-1. 在 **Vercel** / **Netlify** / **Cloudflare Pages** 导入本仓库（`wonderful-1101/flower-sea`）。
-2. 保持以下构建配置：
+1. 导入本 GitHub 仓库（`wonderful-1101/flower-sea`）。
+2. 在平台设置 **Root Directory** 为你想部署的版本目录（推荐 `apps/v3-jardin-oil`）：
+   - **Root Directory**: `apps/v3-jardin-oil`（或 `apps/v2-flora-field` / `apps/v1-flora-single`）
    - **Framework Preset**: `Vite`
    - **Build Command**: `npm run build`
    - **Output Directory**: `dist`
-3. 点击 Deploy，部署完成后把生成的 `https://...` 链接发给朋友，对方点开即玩（无需安装 Node.js 或任何依赖）。
-
-### 局域网临时体验（同一 Wi-Fi 下演示鼠标/触控）
-```bash
-npm run dev -- --host
-```
-可将输出的局域网地址（`http://192.168.x.x:5174`）发给同网络设备预览；若需在局域网测试摄像头手势，建议部署到上述免费 HTTPS 托管平台或为本机 Vite 配置本地 HTTPS 证书。
+3. 点击 Deploy，把生成的 `https://...` 链接发给任何人即可在电脑或手机浏览器直接体验。
 
 ---
 
-## 目录结构
+## 仓库目录结构
 
 ```text
-├── index.html                  # 主页面入口与浮层 HUD 结构
-├── package.json                # Vite + @mediapipe/tasks-vision 依赖与启动脚本
-├── public/
-│   ├── species.json            # 花卉元数据配置（物种、帧数、花粉配色、权重）
-│   ├── sprites/<species>/      # 4 种花卉各 54 帧 512×512 RGBA WebP 透明序列帧
-│   ├── models/                 # MediaPipe hand_landmarker.task 模型文件
-│   └── wasm/                   # MediaPipe Vision WASM 运行时文件
-├── src/
-│   ├── main.js                 # 应用入口、控制抽屉、键鼠输入与 HUD 绑定
-│   ├── fieldEngine.js          # 60 FPS 全屏花海渲染与空间绽放/推拂力场引擎
-│   ├── fieldLayout.js          # 三层泊松盘（Poisson Disk）全屏分布与四角密度保障
-│   ├── gesture.js              # MediaPipe 本地双手空间坐标映射与尺度无关张合识别
-│   ├── filters.js              # 1-Euro 自适应低通滤波器（坐标与张合抗抖）
-│   ├── spriteStore.js          # 序列帧并行预加载与 ImageBitmap 帧索引查询
-│   ├── particles.js            # 盛放花粉光点粒子系统
-│   └── styles.css              # 暖米白画廊视觉、毛玻璃抽屉与响应式样式
-├── assets/
-│   ├── buds/*.png              # 4 张俯拍花苞参考原图
-│   ├── videos/*.mp4            # 4 段 1080P Seedance 2.5 俯拍绽放原始视频
-│   └── review/*_alpha_sheet.jpg # 棋盘格 / 画廊底色透明抠图质检拼图
-└── scripts/
-    ├── matte_frames.swift      # 调用 macOS Vision (VNGenerateForegroundInstanceMaskRequest) 抠图
-    └── build_field_assets.py   # 抽帧 → 神经抠图 → 补洞/时间稳定/去白边/质心对齐 → WebP 导出
+flower-sea/
+├── package.json                        # 一键安装、启动与构建 3 个版本的根脚本
+├── docs/screenshots/                   # 效果截图与透明抠图质检对比图
+└── apps/
+    ├── v1-flora-single/                # V1 · FLORA 单花画廊（默认端口 5173）
+    │   ├── src/                        # main.js / gesture.js / filters.js / frameStore.js / videoImporter.js
+    │   ├── public/                     # flowers.json / 3×90 WebP 序列帧 / 原视频 / MediaPipe WASM & 模型
+    │   ├── scripts/extract_frames.py   # 视频抽帧与背景色采样脚本
+    │   └── assets/                     # 花苞参考图 / 原始 MP4 / 序列拼图
+    ├── v2-flora-field/                 # V2 · FLORA FIELD 俯拍花海（默认端口 5174）
+    │   ├── src/                        # main.js / fieldEngine.js / fieldLayout.js / gesture.js / particles.js
+    │   ├── public/                     # species.json / 4×54 RGBA WebP / MediaPipe WASM & 模型
+    │   ├── scripts/                    # matte_frames.swift & build_field_assets.py
+    │   └── assets/                     # 俯拍花苞原图 / Seedance MP4 / 棋盘格质检图
+    └── v3-jardin-oil/                  # V3 · JARDIN 繁花油画（默认端口 5175）
+        ├── src/                        # main.js / tapestryEngine.js / tapestryLayout.js / gesture.js / particles.js
+        ├── public/                     # bg-foliage.webp / species.json / 5×48 RGBA WebP / MediaPipe WASM & 模型
+        ├── scripts/                    # matte_frames.swift & build_oil_assets.py
+        └── assets/                     # 油画枝叶底图 / 斜面花苞原图 / Seedance MP4 / 暗调质检图
 ```
 
 ---
 
 ## 进阶：如何替换自己的花朵素材（macOS 14+）
 
-如果你想把花海换成自己喜欢的花卉，只需把 **固定俯拍机位、纯色背景** 的花开 MP4 视频放进 `assets/videos/`（对应文件名或同步修改 `scripts/build_field_assets.py` 中的 `SPECIES` 列表），然后重新生成透明序列帧即可：
+V2 与 V3 均内置了基于 Apple Vision（`VNGenerateForegroundInstanceMaskRequest`）的自动批量抠图与时间稳定管线。以 **V3（`apps/v3-jardin-oil`）** 为例：
 
-1. 安装 Python 依赖并确认系统已安装 `ffmpeg` 与 Xcode Command Line Tools：
+1. 将固定机位、纯暗色背景的俯斜花开 MP4 放入 `apps/v3-jardin-oil/assets/videos/`（对应物种名或同步调整 `build_oil_assets.py`）。
+2. 安装 Python 依赖并确认系统已安装 `ffmpeg` 与 Xcode Command Line Tools：
    ```bash
    pip install numpy opencv-python scipy pillow
    ```
-2. 编译 Swift 抠图工具：
+3. 进入目录编译 Swift 抠图器并重建透明序列帧：
    ```bash
+   cd apps/v3-jardin-oil
    swiftc -O scripts/matte_frames.swift -o scripts/matte_frames
+   python3 scripts/build_oil_assets.py
    ```
-3. 执行全自动透明序列帧构建：
-   ```bash
-   python3 scripts/build_field_assets.py
-   ```
-   脚本会自动更新 `public/sprites/`、`public/species.json`，并在 `assets/review/` 输出棋盘格对比质检图。
+   脚本会自动更新 `public/sprites/`、`public/species.json`，并在 `assets/review/` 输出棋盘格与暗调画布对比质检图。

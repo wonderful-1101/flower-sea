@@ -1,0 +1,41 @@
+[
+  {
+    "id": "peony",
+    "index": "01",
+    "zhName": "牡丹",
+    "enName": "Peony",
+    "latinName": "Paeonia suffruticosa",
+    "tagline": "初绽芳华 · 层叠盛放",
+    "accentColor": "#C47D88",
+    "frameDir": "/frames/peony",
+    "frameCount": 90,
+    "videoUrl": "/videos/peony.mp4",
+    "bgColor": "#E5DDD2"
+  },
+  {
+    "id": "iris",
+    "index": "02",
+    "zhName": "鸢尾",
+    "enName": "Iris",
+    "latinName": "Iris germanica",
+    "tagline": "紫韵轻展 · 如蝶翩跹",
+    "accentColor": "#7B68A8",
+    "frameDir": "/frames/iris",
+    "frameCount": 90,
+    "videoUrl": "/videos/iris.mp4",
+    "bgColor": "#EEEAE1"
+  },
+  {
+    "id": "camellia",
+    "index": "03",
+    "zhName": "山茶",
+    "enName": "Camellia",
+    "latinName": "Camellia japonica",
+    "tagline": "素白凝露 · 静雅舒展",
+    "accentColor": "#5E7B64",
+    "frameDir": "/frames/camellia",
+    "frameCount": 90,
+    "videoUrl": "/videos/camellia.mp4",
+    "bgColor": "#ECE9E1"
+  }
+]

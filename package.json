@@ -1,17 +1,19 @@
 {
-  "name": "flora-bloom-field",
+  "name": "flower-sea",
   "version": "1.0.0",
   "private": true,
-  "type": "module",
+  "description": "Three MediaPipe + Seedance 2.5 interactive flower bloom web experiences (FLORA, FLORA FIELD, JARDIN)",
   "scripts": {
-    "dev": "vite --port 5174",
-    "build": "vite build",
-    "preview": "vite preview --port 4174"
-  },
-  "dependencies": {
-    "@mediapipe/tasks-vision": "^0.10.14"
-  },
-  "devDependencies": {
-    "vite": "^6.0.0"
+    "install:v1": "npm --prefix apps/v1-flora-single install",
+    "install:v2": "npm --prefix apps/v2-flora-field install",
+    "install:v3": "npm --prefix apps/v3-jardin-oil install",
+    "install:all": "npm run install:v1 && npm run install:v2 && npm run install:v3",
+    "dev:v1": "npm --prefix apps/v1-flora-single run dev",
+    "dev:v2": "npm --prefix apps/v2-flora-field run dev",
+    "dev:v3": "npm --prefix apps/v3-jardin-oil run dev",
+    "build:v1": "npm --prefix apps/v1-flora-single run build",
+    "build:v2": "npm --prefix apps/v2-flora-field run build",
+    "build:v3": "npm --prefix apps/v3-jardin-oil run build",
+    "build:all": "npm run build:v1 && npm run build:v2 && npm run build:v3"
   }
 }

@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FLORA — In full bloom.</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Inter:wght@400;500&family=Noto+Serif+SC:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div id="app-shell" class="app-shell">
+      <header class="top-bar">
+        <div class="brand">
+          <svg class="brand-mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.35">
+            <path d="M12 3.5c1.8 2.6 1.8 5.4 0 8-1.8-2.6-1.8-5.4 0-8Z" />
+            <path d="M12 12.5c1.8 2.6 1.8 5.4 0 8-1.8-2.6-1.8-5.4 0-8Z" />
+            <path d="M3.5 12c2.6-1.8 5.4-1.8 8 0-2.6 1.8-5.4 1.8-8 0Z" />
+            <path d="M12.5 12c2.6-1.8 5.4-1.8 8 0-2.6 1.8-5.4 1.8-8 0Z" />
+            <circle cx="12" cy="12" r="1.4" fill="currentColor" stroke="none" />
+          </svg>
+          <span>FLORA</span>
+        </div>
+
+        <nav id="specimen-tabs" class="specimen-tabs" aria-label="花卉标本切换"></nav>
+
+        <div class="top-actions">
+          <button id="import-btn" class="pill-btn" type="button" title="拖入或选择 MP4 花朵延时视频">
+            导入视频
+          </button>
+          <button id="split-btn" class="pill-btn" type="button" title="切换浮窗与分屏录制视图">
+            分屏视图
+          </button>
+          <button id="camera-btn" class="pill-btn is-primary" type="button">
+            <span class="dot-live"></span>
+            <span id="camera-btn-label">开启手势</span>
+          </button>
+          <input id="video-file-input" type="file" accept="video/*" hidden />
+        </div>
+      </header>
+
+      <main class="workspace">
+        <section class="gallery-stage">
+          <div class="editorial-col">
+            <h1 class="hero-title">
+              In full<br />
+              <em>bloom.</em>
+            </h1>
+            <div class="rule-short"></div>
+            <div class="bloom-readout">
+              <span id="bloom-pct" class="bloom-pct">0%</span>
+              <span class="bloom-caption">指尖微展 · 循息绽放</span>
+            </div>
+          </div>
+
+          <div id="flower-stage" class="flower-stage">
+            <div id="flower-canvas-wrap" class="flower-canvas-wrap">
+              <canvas id="flower-canvas" width="960" height="960"></canvas>
+              <div id="preload-badge" class="preload-badge">加载标本帧 0%</div>
+            </div>
+          </div>
+
+          <aside class="specimen-col">
+            <h2 id="specimen-zh" class="specimen-zh">牡丹</h2>
+            <div id="specimen-en" class="specimen-en">
+              Peony · <em>Paeonia suffruticosa</em>
+            </div>
+            <div class="rule-short"></div>
+            <p id="specimen-tagline" class="specimen-tagline">初绽芳华 · 层叠盛放</p>
+            <div id="specimen-dots" class="specimen-dots"></div>
+          </aside>
+
+          <footer class="stage-footer">
+            <span class="hint-text">
+              单手控制：拇指与食指张合控制绽放 · 第二手势或左右键切换花种 · 支持鼠标拖拽 / 滚轮 / 拖入 MP4
+            </span>
+            <div class="scrubber-group">
+              <span class="scrubber-label">Bloom</span>
+              <input
+                id="bloom-slider"
+                class="bloom-slider"
+                type="range"
+                min="0"
+                max="100"
+                step="1"
+                value="0"
+                aria-label="绽放进度滑块"
+              />
+            </div>
+          </footer>
+        </section>
+
+        <section id="camera-hud" class="camera-hud" aria-label="摄像头手势骨架视图">
+          <video id="webcam-video" autoplay playsinline muted></video>
+          <canvas id="skeleton-canvas"></canvas>
+
+          <div class="hud-telemetry">
+            <div class="hud-row">
+              <div class="hud-row-head">
+                <span>01 拇指张合</span>
+                <span id="hud-primary-val" class="hud-row-val">0%</span>
+              </div>
+              <div class="hud-bar-track">
+                <div id="hud-primary-bar" class="hud-bar-fill"></div>
+              </div>
+            </div>
+            <div class="hud-row">
+              <div class="hud-row-head">
+                <span>02 第二手势</span>
+                <span id="hud-secondary-val" class="hud-row-val">待机</span>
+              </div>
+              <div class="hud-bar-track">
+                <div id="hud-secondary-bar" class="hud-bar-fill is-secondary"></div>
+              </div>
+            </div>
+          </div>
+
+          <div id="hud-status-banner" class="hud-status-banner">
+            <div id="hud-status-text">摄像头未开启</div>
+            <div id="hud-status-sub" class="hud-status-sub"></div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <div id="drop-overlay" class="drop-overlay">
+      <div class="drop-title">Drop botanical timelapse</div>
+      <div class="drop-sub">松开即可导入 MP4 / WebM 视频并自动抽取无延迟序列帧</div>
+    </div>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
